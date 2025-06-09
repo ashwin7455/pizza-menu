@@ -75,11 +75,18 @@ function Menu() {
       <h2>Our Menu</h2>
 
       {numPizzas > 0 ? (
-        <ul className="pizzas">
-          {pizzas.map((pizza) => (
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Hope we are excited for tomorrow session at 11AM IST with below
+            Agenda: [1] BA Interview Process [2] Expectations from Applicant [3]
+            Common challenges BA's face during Interview
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>we are still working on our menu .please come back later.</p>
       )}
@@ -99,16 +106,21 @@ function Menu() {
   );
 }
 
-function Pizza(props) {
-  console.log(props);
-  if (props.pizzaObj.soldOut) return null;
+function Pizza({ pizzaObj }) {
+  console.log(pizzaObj);
+  // if (pizzaObj.soldOut) return null;
   return (
-    <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt=" pizzas" />
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : " "}`}>
+      <img src={pizzaObj.photoName} alt=" pizzas" />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        {/* {pizzaObj.soldOut ? (
+          <span>SOLD OUT</span>
+        ) : (
+          <span>{pizzaObj.price}</span>
+        )} */}
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -117,8 +129,8 @@ function Pizza(props) {
 function Footer() {
   const hour = new Date().getHours();
   console.log(hour);
-  const openHour = 13;
-  const closeHour = 22;
+  const openHour = 18;
+  const closeHour = 23;
 
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
@@ -137,18 +149,26 @@ function Footer() {
   return (
     <footer className="footer">
       {isOpen ? (
-        <div className="order">
-          <p>
-            we are open until {closeHour}:00 . Come visit us or order online .
-          </p>
-          <button className="btn"> Order</button>
-        </div>
+        <Order closeHours={closeHour} openHours={openHour} />
       ) : (
         <p>
-          we are happy to welcome you between {openHour}:00 and {closeHour}:00{" "}
+          sorry , closed now we are happy to welcome you between {openHour}:00
+          and {closeHour}:00{" "}
         </p>
       )}
     </footer>
+  );
+}
+
+function Order({ closeHours, openHours }) {
+  return (
+    <div className="order">
+      <p>
+        we are open from {openHours}:00 to {closeHours}:00 . Come visit us or
+        order online .
+      </p>
+      <button className="btn"> Order</button>
+    </div>
   );
 }
 
